@@ -1,0 +1,6 @@
+seguridad:
+    resource: "@AppBundle/Resources/config/routing.yml"
+    prefix:   /
+_welcome:
+    path:  /
+    defaults: { _controller: AppBundle:Default:login }

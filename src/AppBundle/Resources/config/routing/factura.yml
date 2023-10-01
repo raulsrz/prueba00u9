@@ -1,0 +1,28 @@
+factura_index:
+    path:     /
+    defaults: { _controller: "AppBundle:Factura:index" }
+    methods:  GET
+
+factura_show:
+    path:     /{id}/show
+    defaults: { _controller: "AppBundle:Factura:show" }
+
+
+factura_new:
+    path:     /new
+    defaults: { _controller: "AppBundle:Factura:new" }
+    methods:  [GET, POST]
+
+factura_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AppBundle:Factura:edit" }
+    methods:  [GET, POST]
+
+factura_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AppBundle:Factura:delete" }
+
+factura_nuevo:
+    path:     /nuevo
+    defaults: { _controller: "AppBundle:Factura:nuevo" }
+    methods:  [GET, POST]

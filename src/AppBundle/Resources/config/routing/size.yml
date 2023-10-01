@@ -1,0 +1,24 @@
+size_index:
+    path:     /
+    defaults: { _controller: "AppBundle:Size:index" }
+    methods:  GET
+
+size_show:
+    path:     /{id}/show
+    defaults: { _controller: "AppBundle:Size:show" }
+    methods:  GET
+
+size_new:
+    path:     /new
+    defaults: { _controller: "AppBundle:Size:new" }
+    methods:  [GET, POST]
+
+size_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AppBundle:Size:edit" }
+    methods:  [GET, POST]
+
+size_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AppBundle:Size:delete" }
+

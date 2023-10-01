@@ -1,0 +1,24 @@
+{% extends 'backend.html.twig' %}
+
+{% block tabla %}
+    <div class="col-lg-1">
+    </div>
+    <div class="col-lg-10">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>Insertar Producto</h5>
+            </div>
+            <div class="ibox-content">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <br>
+                <button class="btn btn-sm btn-primary pull-left m-t-n-xs" type="submit"><strong>Aceptar</strong></button>
+                {{ form_end(form) }}
+                <br>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-1">
+    </div>
+
+{% endblock %}

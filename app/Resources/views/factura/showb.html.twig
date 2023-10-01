@@ -1,0 +1,422 @@
+{% if factura.idioma == 'Ingles' %}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>New bill</title>
+        <link rel="stylesheet" href="{{ asset('css/reporte.css') }}">
+    </head>
+    <body>
+    <div class="control-bar">
+        <div class="container">
+            <div class="row">
+                <div class="col-2-4">
+                    <div class="slogan">Billing </div>
+
+
+
+                </div>
+                <div class="col-4 text-right">
+                    <a href="javascript:window.print()">Print</a>
+                </div><!--.col-->
+            </div><!--.row-->
+        </div><!--.container-->
+    </div><!--.control-bar-->
+
+    <header class="row">
+        <div class="logoholder text-center" >
+            <img src="{{ asset('img/logo2.png') }}">
+        </div><!--.logoholder-->
+
+        <div class="me">
+            <p>
+                <strong>Rady Fresh Fruit LLC</strong><br>
+                342 Main ST , Wuaconda IL 60084<br>
+                United States.<br>
+
+            </p>
+        </div><!--.me-->
+
+        <div class="info">
+            <p>
+                Web: <a href="http://ejemplo.com">www.ejemplo.com</a><br>
+                E-mail: <a href="mailto:info@ejemplo.com">info@ejemplo.com</a><br>
+                Tel: +1-111-111-1111<br>
+                Twitter: @ejemplo
+            </p>
+        </div><!-- .info -->
+
+        <div class="bank">
+            <p>
+                Bank data: <br>
+                Account holder: <br>
+                IBAN: <br>
+                BIC:
+            </p>
+        </div><!--.bank-->
+
+    </header>
+
+
+    <div class="row section">
+
+        <div class="col-2">
+            <h1>Bill</h1>
+        </div><!--.col-->
+
+        <div class="col-2 text-right details">
+            <p>
+                Date: {{ factura.fecha|date('m/d/Y') }}<br>
+                Bill #: {{ factura.id }}<br>
+
+            </p>
+        </div><!--.col-->
+
+
+
+        <div class="col-2">
+
+
+            <p class="client">
+                <strong>Send to:</strong><br>
+                Client name: {{ factura.nombcliente }}<br>
+                Company name: {{ factura.nombempresa }}<br>
+                Company address: {{ factura.direcmpresa }}<br>
+                company phone: {{ factura.telecmpresa }}
+            </p>
+        </div><!--.col-->
+
+
+
+
+
+    </div><!--.row-->
+
+    <div class="row section" style="margin-top:-1rem">
+        <div class="col-1">
+            <table style='width:100%'>
+                <thead>
+                <tr class="invoice_detail">
+                    <th width="25%" style="text-align">Seller</th>
+
+                    <th width="30%">Terms and Conditions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="invoice_detail">
+                    <td width="25%" style="text-align">{{ factura.nombvendedor }}</td>
+
+                    <td width="30%">Cash payment</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div><!--.row-->
+
+    <div class="invoicelist-body">
+        <table>
+            <thead>
+            <th width="5%">Code</th>
+            <th width="60%">Product</th>
+            <th width="10%">Amount</th>
+            <th width="60%">Size</th>
+            <th width="60%">Packaging Type</th>
+
+            <th width="15%">Price</th>
+            <th class="taxrelated">Tax/unit</th>
+            <th width="10%">Total</th>
+            </thead>
+            <tbody>
+            {% set impuestotal ='0' %}
+            {% set sumatotal ='0' %}
+            {% for producto in productos %}
+                <tr>
+                    {% for codigo in codigos %}
+                        {% if codigo.id== factura.productoid.codigoid.id %}
+                            <td width='5%'><span>{{ codigo.nombre }}</span></td>
+                        {% endif %}
+                    {% endfor %}
+                    <td width='60%'><span>{{ factura.productoid }}</span></td>
+                    <td class="amount"><span>{{ producto.cantidad }}</span></td>
+                    <td width='5%'><span>{{ factura.tipoid }}</span></td>
+                    <td width='5%'><span>{{ factura.tipoid }}</span></td>
+
+
+                    {% if factura.moneda=='Dolar' %}
+                        <td class="rate"><span>${{ producto.producto.precio|number_format(2, '.', '') }}</span></td>
+                    {% else %}
+                        <td class="rate"><span>€{{ producto.producto.precio|number_format(2, '.', '') }}</span></td>
+                    {% endif %}
+
+
+                    {% set total =producto.producto.precio * producto.cantidad + producto.producto.impuesto *producto.cantidad %}
+                    {% if factura.moneda=='Dolar' %}
+                        <td class="tax taxrelated">${{ producto.producto.impuesto|number_format(2, '.', '') }}</td>
+                        <td class="sum">${{ total }}</td>
+                    {% else %}
+                        <td class="tax taxrelated">€{{ producto.producto.impuesto|number_format(2, '.', '') }}</td>
+                        <td class="sum">€{{ total|number_format(2, '.', '') }}</td>
+                    {% endif %}
+
+                    {% set impuestotal =impuestotal + producto.producto.impuesto * producto.cantidad %}
+                    {% set sumatotal = sumatotal + producto.producto.precio * producto.cantidad + producto.producto.impuesto *producto.cantidad %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div><!--.invoice-body-->
+
+    <div class="invoicelist-footer">
+        <table>
+            {% if factura.moneda=='Dolar' %}
+
+                <tr class="taxrelated">
+                    <td>Tax:</td>
+
+                    <td id="total_tax">${{ impuestotal|number_format(2, '.', '') }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Total:</strong></td>
+                    <td id="total_price">${{ sumatotal|number_format(2, '.', '') }}</td>
+                </tr>
+            {% else %}
+                <tr class="taxrelated">
+                    <td>Tax:</td>
+
+                    <td id="total_tax">€{{ impuestotal|number_format(2, '.', '') }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Total:</strong></td>
+                    <td id="total_price">€{{ sumatotal|number_format(2, '.', '') }}</td>
+                </tr>
+
+
+            {% endif %}
+
+        </table>
+    </div>
+
+    <div class="note">
+        <h2>Note: {{ factura.nota }}</h2>
+    </div><!--.note-->
+
+    <footer class="row">
+
+    </footer>
+
+    </body>
+    </html>
+{% else %}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Crear facturas</title>
+        <link rel="stylesheet" href="{{ asset('css/reporte.css') }}">
+    </head>
+    <body>
+    <div class="control-bar">
+        <div class="container">
+            <div class="row">
+                <div class="col-2-4">
+                    <div class="slogan">Facturación </div>
+
+
+
+                </div>
+                <div class="col-4 text-right">
+                    <a href="javascript:window.print()">Imprimir</a>
+                </div><!--.col-->
+            </div><!--.row-->
+        </div><!--.container-->
+    </div><!--.control-bar-->
+
+    <header class="row">
+        <div class="logoholder text-center" >
+            <img src="{{ asset('img/logo2.png') }}">
+        </div><!--.logoholder-->
+
+        <div class="me">
+            <p>
+                <strong>Rady Fresh Fruit LLC</strong><br>
+                342 Main ST , Wuaconda IL 60084<br>
+                United States.<br>
+
+            </p>
+        </div><!--.me-->
+
+        <div class="info">
+            <p>
+                Web: <a href="http://ejemplo.com">www.ejemplo.com</a><br>
+                E-mail: <a href="mailto:info@ejemplo.com">info@ejemplo.com</a><br>
+                Tel: +1-111-111-1111<br>
+                Twitter: @ejemplo
+            </p>
+        </div><!-- .info -->
+
+        <div class="bank">
+            <p>
+                Datos bacarios: <br>
+                Titular de la cuenta: <br>
+                IBAN: <br>
+                BIC:
+            </p>
+        </div><!--.bank-->
+
+    </header>
+
+
+    <div class="row section">
+
+        <div class="col-2">
+            <h1>Factura</h1>
+        </div><!--.col-->
+
+        <div class="col-2 text-right details">
+            <p>
+                Fecha: {{ factura.fecha|date('d/m/Y') }}<br>
+                Factura #: {{ factura.id }}<br>
+
+            </p>
+        </div><!--.col-->
+
+
+
+        <div class="col-2">
+
+
+            <p class="client">
+                <strong>Enviar a:</strong><br>
+                Nombre cliente: {{ factura.nombcliente }}<br>
+                Nombre emmpresa: {{ factura.nombempresa }}<br>
+                Dirección empresa: {{ factura.direcmpresa }}<br>
+                Tel empresa: {{ factura.telecmpresa }}
+            </p>
+        </div><!--.col-->
+
+
+
+
+
+    </div><!--.row-->
+
+    <div class="row section" style="margin-top:-1rem">
+        <div class="col-1">
+            <table style='width:100%'>
+                <thead>
+                <tr class="invoice_detail">
+                    <th width="25%" style="text-align">Vendedor</th>
+
+                    <th width="30%">Términos y condiciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="invoice_detail">
+                    <td width="25%" style="text-align">{{ factura.nombvendedor }}</td>
+
+                    <td width="30%">Pago al contado</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div><!--.row-->
+
+    <div class="invoicelist-body">
+        <table>
+            <thead>
+            <th width="5%">Código</th>
+            <th width="60%">Producto</th>
+            <th width="10%">Cantidad</th>
+            <th width="30%">Tamaño</th>
+            <th width="60%">Tipo de Empaque</th>
+
+
+            <th width="100%">Precio/caja</th>
+            <th class="taxrelated">Impuesto/caja</th>
+            <th width="10%">Total</th>
+            </thead>
+            <tbody>
+            {% set impuestotal ='0' %}
+            {% set sumatotal ='0' %}
+            {% for producto in productos %}
+                <tr>
+                    {% for codigo in codigos %}
+                        {% if codigo.id== factura.productoid.codigoid.id %}
+                            <td width='5%'><span>{{ codigo.nombre }}</span></td>
+                        {% endif %}
+                    {% endfor %}
+                    <td width='60%'><span>{{ factura.productoid }}</span></td>
+                    <td class="amount"><span>{{ producto.cantidad }}</span></td>
+                    <td width='5%'><span>{{ factura.tipoid }}</span></td>
+                    <td width='5%'><span>{{ factura.tipoid }}</span></td>
+
+
+                    {% if factura.moneda=='Dolar' %}
+                        <td class="rate"><span>${{ producto.producto.precio|number_format(2, '.', '') }}</span></td>
+                    {% else %}
+                        <td class="rate"><span>€{{ producto.producto.precio|number_format(2, '.', '') }}</span></td>
+                    {% endif %}
+
+
+                    {% set total =producto.producto.precio * producto.cantidad + producto.producto.impuesto *producto.cantidad %}
+                    {% if factura.moneda=='Dolar' %}
+                        <td class="tax taxrelated">${{ producto.producto.impuesto|number_format(2, '.', '') }}</td>
+                        <td class="sum">${{ total }}</td>
+                    {% else %}
+                        <td class="tax taxrelated">€{{ producto.producto.impuesto|number_format(2, '.', '') }}</td>
+                        <td class="sum">€{{ total|number_format(2, '.', '') }}</td>
+                    {% endif %}
+
+                    {% set impuestotal =impuestotal + producto.producto.impuesto * producto.cantidad %}
+                    {% set sumatotal = sumatotal + producto.producto.precio * producto.cantidad + producto.producto.impuesto *producto.cantidad %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div><!--.invoice-body-->
+
+    <div class="invoicelist-footer">
+        <table>
+            {% if factura.moneda=='Dolar' %}
+
+                <tr class="taxrelated">
+                    <td>Impuesto:</td>
+
+                    <td id="total_tax">${{ impuestotal|number_format(2, '.', '') }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Total:</strong></td>
+                    <td id="total_price">${{ sumatotal|number_format(2, '.', '') }}</td>
+                </tr>
+            {% else %}
+                <tr class="taxrelated">
+                    <td>Impuesto:</td>
+
+                    <td id="total_tax">€{{ impuestotal|number_format(2, '.', '') }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Total:</strong></td>
+                    <td id="total_price">€{{ sumatotal|number_format(2, '.', '') }}</td>
+                </tr>
+
+
+            {% endif %}
+
+        </table>
+    </div>
+
+    <div class="note">
+        <h2>Nota: {{ factura.nota }}</h2>
+    </div><!--.note-->
+
+    <footer class="row">
+
+    </footer>
+
+    </body>
+    </html>
+{% endif %}

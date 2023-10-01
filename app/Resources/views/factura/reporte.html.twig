@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear facturas</title>
+    <link rel="stylesheet" href="css/reporte.css">
+</head>
+<body>
+<div class="control-bar">
+    <div class="container">
+        <div class="row">
+            <div class="col-2-4">
+                <div class="slogan">Facturación </div>
+
+
+
+            </div>
+            <div class="col-4 text-right">
+                <a href="javascript:window.print()">Imprimir</a>
+            </div><!--.col-->
+        </div><!--.row-->
+    </div><!--.container-->
+</div><!--.control-bar-->
+
+<header class="row">
+    <div class="logoholder text-center" >
+        <img src="img/logo.png">
+    </div><!--.logoholder-->
+
+    <div class="me">
+        <p>
+            <strong>Sistema generar factura</strong><br>
+            234/90, New York Street<br>
+            United States.<br>
+
+        </p>
+    </div><!--.me-->
+
+    <div class="info">
+        <p>
+            Web: <a href="http://ejemplo.com">www.ejemplo.com</a><br>
+            E-mail: <a href="mailto:info@ejemplo.com">info@ejemplo.com</a><br>
+            Tel: +1-111-111-1111<br>
+            Twitter: @ejemplo
+        </p>
+    </div><!-- .info -->
+
+    <div class="bank">
+        <p>
+            Datos bacarios: <br>
+            Titular de la cuenta: <br>
+            IBAN: <br>
+            BIC:
+        </p>
+    </div><!--.bank-->
+
+</header>
+
+
+<div class="row section">
+
+    <div class="col-2">
+        <h1>Factura</h1>
+    </div><!--.col-->
+
+    <div class="col-2 text-right details">
+        <p>
+            Fecha: 14/09/2023<br>
+            Factura #: 100<br>
+
+        </p>
+    </div><!--.col-->
+
+
+
+    <div class="col-2">
+
+
+        <p class="client">
+            <strong>Facturar a</strong><br>
+            [Nombre cliente]<br>
+            [Nombre emmpresa]<br>
+            [Dirección empresa]<br>
+            [Tel empresa]
+        </p>
+    </div><!--.col-->
+
+
+    <div class="col-2">
+
+
+        <p class="client">
+            <strong>Enviar a</strong><br>
+            [Nombre cliente]<br>
+            [Nombre emmpresa]<br>
+            [Dirección empresa]<br>
+            [Tel empresa]
+        </p>
+    </div><!--.col-->
+
+
+
+</div><!--.row-->
+
+<div class="row section" style="margin-top:-1rem">
+    <div class="col-1">
+        <table style='width:100%'>
+            <thead>
+            <tr class="invoice_detail">
+                <th width="25%" style="text-align">Vendedor</th>
+
+                <th width="30%">Términos y condiciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="invoice_detail">
+                <td width="25%" style="text-align">John Doe</td>
+
+                <td width="30%">Pago al contado</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div><!--.row-->
+
+<div class="invoicelist-body">
+    <table>
+        <thead>
+        <th width="5%">Código</th>
+        <th width="60%">Producto</th>
+
+        <th width="10%">Cant.</th>
+        <th width="15%">Precio</th>
+        <th class="taxrelated">Impuesto</th>
+        <th width="10%">Total</th>
+        </thead>
+        <tbody>
+        <tr>
+            <td width='5%'><a class="control removeRow" href="#">x</a> <span>12345</span></td>
+            <td width='60%'><span>ejemplo</span></td>
+            <td class="amount"><input type="text" value="1"/></td>
+            <td class="rate"><input type="text" value="99" /></td>
+            <td class="tax taxrelated">5</td>
+            <td class="sum">104</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div><!--.invoice-body-->
+
+<div class="invoicelist-footer">
+    <table>
+        <tr class="taxrelated">
+            <td>Impuesto:</td>
+            <td id="total_tax">5</td>
+        </tr>
+        <tr>
+            <td><strong>Total:</strong></td>
+            <td id="total_price">104</td>
+        </tr>
+    </table>
+</div>
+
+<div class="note">
+    <h2>Nota:</h2>
+</div><!--.note-->
+
+<footer class="row">
+
+</footer>
+
+</body>
+</html>

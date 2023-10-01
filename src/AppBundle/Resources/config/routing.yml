@@ -1,0 +1,36 @@
+app_usuario:
+    resource: "@AppBundle/Resources/config/routing/usuario.yml"
+    prefix:   /usuario
+app_factura:
+    resource: "@AppBundle/Resources/config/routing/factura.yml"
+    prefix:   /factura
+app_producto:
+    resource: "@AppBundle/Resources/config/routing/producto.yml"
+    prefix:   /producto
+app_codigo:
+    resource: "@AppBundle/Resources/config/routing/codigo.yml"
+    prefix:   /codigo
+app_size:
+    resource: "@AppBundle/Resources/config/routing/size.yml"
+    prefix:   /size
+app_tipo:
+    resource: "@AppBundle/Resources/config/routing/tipo.yml"
+    prefix:   /tipo
+app_dato:
+    resource: "@AppBundle/Resources/config/routing/dato.yml"
+    prefix:   /dato
+login:
+    path:  /login
+    defaults: { _controller: AppBundle:Default:login }
+login_check:
+    path: /login_check
+
+logout:
+    path: /logout
+portada:
+    path:  /portada
+    defaults: { _controller: AppBundle:Default:portada }
+
+redireccionar:
+    path:  /redireccionar
+    defaults: { _controller: AppBundle:Default:redireccionar }

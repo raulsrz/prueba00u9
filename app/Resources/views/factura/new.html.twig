@@ -1,0 +1,128 @@
+{% extends 'backend.html.twig' %}
+{% block tabla %}
+
+    <form action="{{ path('factura_nuevo') }}" method="post" id="facturaForm">
+
+        <div id="productForm">
+
+            <input id="prod" name="prod" class="form-control" value="{{ prod }}" readonly>
+
+            <input id="nombcliente" name="nombcliente" class="form-control" required="required" placeholder="Nombre del Cliente">
+            <input id="nombempresa" name="nombempresa" class="form-control" required="required" placeholder="Nombre de la Empresa">
+            <input id="nombvendedor" name="nombvendedor" class="form-control" required="required" placeholder="Nombre del Vendedor">
+
+            <input id="direcempresa" name="direcempresa" class="form-control" required="required" placeholder="Direccion de la Empresa">
+            <input id="telempresa" name="telempresa" class="form-control" required="required" placeholder="Telefono de la Empresa">
+            <input id="nota" name="nota" class="form-control" placeholder="Nota">
+
+            <label>Tipo de Empaque</label>
+            <select id="tipo" class="form-control" name="tipo" required="required">
+                <option value=""></option>
+                {% for tipo in tipos %}
+                    <option value="{{ tipo.id }}">{{ tipo.nombre }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Moneda</label>
+            <select id="moneda" class="form-control" name="moneda" required="required">
+                <option></option>
+                <option>Dolar</option>
+                <option>Euro</option>
+            </select>
+
+            <br>
+
+            <select id="idioma" name="idioma" required="required">
+                <option>Idioma de la Factura</option>
+                <option>Español</option>
+                <option>Ingles</option>
+            </select>
+            <select id="sizeSelect" onchange="limpiarCantidad()">
+                <option value="">Selecciona una talla</option>
+                {% for size in sizes %}
+                    <option value="{{ size.id }}">{{ size.nombre }}</option>
+                {% endfor %}
+            </select>
+
+            <input type="number" id="cantidadInput" min="1" placeholder="Cantidad">
+            <button type="button" onclick="agregarSize()">Agregar Talla</button>
+
+        </div>
+
+        <h2>Tallas Seleccionadas</h2>
+        <ul id="tallasSeleccionadas"></ul>
+
+        <input type="hidden" name="tallasData">
+        <button type="submit">Generar Factura</button>
+    </form>
+
+    <script>
+        const tallasSeleccionadas = [];
+
+        function filtrarTallas() {
+            const filtro = document.getElementById('sizeInput').value.toLowerCase();
+            const options = document.querySelectorAll('#sizeSelect option');
+
+            options.forEach(option => {
+                const sizeNombre = option.textContent.toLowerCase();
+            const optionElement = document.querySelector(`#sizeSelect option[value="${option.value}"]`);
+            if (sizeNombre.includes(filtro)) {
+                optionElement.style.display = '';
+            } else {
+                optionElement.style.display = 'none';
+            }
+        });
+        }
+
+        function limpiarCantidad() {
+            document.getElementById('cantidadInput').value = '';
+        }
+
+        function limpiarCampos() {
+            document.getElementById('sizeSelect').value = '';
+            document.getElementById('cantidadInput').value = '';
+        }
+
+        function agregarSize() {
+            const sizeSelect = document.getElementById('sizeSelect');
+            const cantidadInput = document.getElementById('cantidadInput');
+
+            const sizeId = sizeSelect.value;
+            const sizeNombre = sizeSelect.options[sizeSelect.selectedIndex].text;
+            const cantidad = cantidadInput.value;
+
+            if (sizeId && cantidad) {
+                tallasSeleccionadas.push({ id: sizeId, nombre: sizeNombre, cantidad: cantidad });
+                actualizarListaTallas();
+                limpiarCampos();
+            }
+        }
+
+        function actualizarListaTallas() {
+            const listaTallas = document.getElementById('tallasSeleccionadas');
+            listaTallas.innerHTML = '';
+
+            for (let i = 0; i < tallasSeleccionadas.length; i++) {
+                const talla = tallasSeleccionadas[i];
+
+                const listItem = document.createElement('li');
+                listItem.textContent = `${talla.nombre} - Cantidad: ${talla.cantidad} `;
+
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Quitar';
+                removeButton.addEventListener('click', () => quitarTalla(i));
+
+                listItem.appendChild(removeButton);
+                listaTallas.appendChild(listItem);
+            }
+
+            const tallasDataInput = document.querySelector('input[name="tallasData"]');
+            tallasDataInput.value = JSON.stringify(tallasSeleccionadas);
+        }
+
+        function quitarTalla(index) {
+            tallasSeleccionadas.splice(index, 1);
+            actualizarListaTallas();
+        }
+    </script>
+{% endblock %}
